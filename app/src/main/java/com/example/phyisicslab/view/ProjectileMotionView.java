@@ -15,6 +15,22 @@ import com.example.phyisicslab.physics.SimulationAnalyzer;
 
 public class ProjectileMotionView extends View {
 
+    public interface SimulationFinishedListener {
+        void onSimulationFinished(
+                double maximumHeight,
+                double flightTime,
+                double landingPosition,
+                double analyticalMaximumHeight,
+                double analyticalFlightTime,
+                double analyticalLandingPosition,
+                double heightErrorPercent,
+                double flightTimeErrorPercent,
+                double landingPositionErrorPercent
+        );
+    }
+
+    private SimulationFinishedListener listener;
+
 
     private boolean simulationRunning = true;
 
@@ -55,13 +71,13 @@ public class ProjectileMotionView extends View {
     private double landingPositionError = 0;
     private double landingPositionErrorPercent = 0;
 
-    public ProjectileMotionView(Context context, double v0, double angleDegrees, double mass, double gravityField) {
+    public ProjectileMotionView(Context context, double v0, double angleDegrees, double mass, double gravityField, SimulationFinishedListener listener) {
         super(context);
 
         this.initialVelocity = v0;
         this.angleDegrees = angleDegrees;
         this.gravityField = gravityField;
-
+        this.listener = listener;
 
         paint = new Paint();
         paint.setAntiAlias(true);
@@ -145,6 +161,20 @@ public class ProjectileMotionView extends View {
                 flightTimeErrorPercent = (flightTimeError / analyticalFlightTime) * 100;
                 landingPositionError = Math.abs(landingPosition - analyticalLandingPosition);
                 landingPositionErrorPercent = (landingPositionError / analyticalLandingPosition) * 100;
+
+                if (listener != null) {
+                    listener.onSimulationFinished(
+                            maximumHeight,
+                            simulationTime,
+                            landingPosition,
+                            analyticalMaximumHeight,
+                            analyticalFlightTime,
+                            analyticalLandingPosition,
+                            heightErrorPercent,
+                            flightTimeErrorPercent,
+                            landingPositionErrorPercent
+                    );
+                }
             }
 
 
@@ -163,50 +193,126 @@ public class ProjectileMotionView extends View {
     protected void onDraw(Canvas canvas) {
         super.onDraw(canvas);
 
-        // White background
+        // Light blue background
         canvas.drawColor(0xFFEAF7FB);
 
-        // Get physics position
         Body ball = world.getBodies().get(0);
-
         Vector2 position = ball.getPosition();
 
-        // Convert physics coordinates → screen coordinates
-        float x = (float) (100 + position.x * 50);
+        // Screen settings
+        float groundY = getHeight() - 60;
+        float originX = 60;
+        float pixelsPerMeter = 12;
 
-        float y = (float) (getHeight() - 100 - position.y * 50);
+        // Draw ground
+        paint.setStrokeWidth(5);
+        canvas.drawLine(
+                0,
+                groundY,
+                getWidth(),
+                groundY,
+                paint
+        );
 
-        // Draw ball
-        canvas.drawCircle(x, y, 30, paint);
+        // Draw Y axis
+        paint.setStrokeWidth(3);
+        canvas.drawLine(
+                originX,
+                groundY,
+                originX,
+                20,
+                paint
+        );
 
-        if (!simulationRunning) {
+        // Draw X axis
+        canvas.drawLine(
+                originX,
+                groundY,
+                getWidth() - 20,
+                groundY,
+                paint
+        );
 
-            paint.setTextSize(50);
+        paint.setTextSize(24);
+        paint.setStrokeWidth(2);
 
-            String maxHeightText = String.format(
-                    "Max Height: %.2f m | Analytical: %.2f m | Error: %.2f%%",
-                    maximumHeight,
-                    analyticalMaximumHeight,
-                    heightErrorPercent
+        // X marks
+        for (int meter = 0; meter <= 90; meter += 5) {
+
+            float markX = originX + meter * pixelsPerMeter;
+
+            // Small tick
+            canvas.drawLine(
+                    markX,
+                    groundY - 8,
+                    markX,
+                    groundY + 8,
+                    paint
             );
 
-            String flightTimeText = String.format(
-                    "Flight Time: %.2f s | Analytical: %.2f s | Error: %.2f%%",
-                    simulationTime,
-                    analyticalFlightTime,
-                    flightTimeErrorPercent
+            // Label
+            canvas.drawText(
+                    String.valueOf(meter),
+                    markX - 10,
+                    groundY + 35,
+                    paint
             );
-
-            String landingText = String.format(
-                    "Landing: %.2f m | Analytical: %.2f m | Error: %.2f%%",
-                    landingPosition,
-                    analyticalLandingPosition,
-                    landingPositionErrorPercent
-            );
-
-            canvas.drawText(maxHeightText, 50, 200, paint);
-            canvas.drawText(flightTimeText, 50, 320, paint);
-            canvas.drawText(landingText, 50, 440, paint);
         }
+
+        // Y marks
+        for (int meter = 0; meter <= 90; meter += 5) {
+
+            float markY = groundY - meter * pixelsPerMeter;
+
+            // Small tick
+            canvas.drawLine(
+                    originX - 8,
+                    markY,
+                    originX + 8,
+                    markY,
+                    paint
+            );
+
+            // Label
+            canvas.drawText(
+                    String.valueOf(meter),
+                    originX - 45,
+                    markY + 8,
+                    paint
+            );
+        }
+
+        canvas.drawText(
+                "X (m)",
+                getWidth() - 80,
+                groundY - 15,
+                paint
+        );
+
+        canvas.drawText(
+                "Y (m)",
+                originX + 15,
+                35,
+                paint
+        );
+
+        // Convert physics coordinates to screen coordinates
+        float x = (float) (
+                originX + position.x * pixelsPerMeter
+        );
+
+        float y = (float) (
+                groundY - position.y * pixelsPerMeter
+        );
+
+        // Draw projectile
+        canvas.drawCircle(
+                x,
+                y,
+                18,
+                paint
+        );
+
     }
+
 }
