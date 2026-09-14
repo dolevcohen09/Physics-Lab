@@ -1,0 +1,167 @@
+<?xml version="1.0" encoding="utf-8"?>
+
+<ScrollView xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:fillViewport="true">
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:orientation="vertical"
+        android:padding="16dp">
+
+        <TextView
+            android:id="@+id/projectileTitle"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="Projectile Motion"
+            android:textSize="28sp"
+            android:textStyle="bold" />
+
+        <TextView
+            android:id="@+id/parametersText"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="v₀ = 15 m/s   θ = 45°   g = 9.81 m/s²"
+            android:textSize="16sp"
+            android:layout_marginTop="6dp"
+            android:layout_marginBottom="14dp" />
+
+        <!-- Simulation Area -->
+        <FrameLayout
+            android:id="@+id/simulationContainer"
+            android:layout_width="match_parent"
+            android:layout_height="420dp"
+            android:background="#DDF4FA" />
+
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="Results"
+            android:textSize="24sp"
+            android:textStyle="bold"
+            android:layout_marginTop="20dp"
+            android:layout_marginBottom="12dp" />
+
+        <!-- Maximum Height -->
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:orientation="vertical"
+            android:padding="12dp"
+            android:background="#EEEEEE">
+
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="Maximum Height"
+                android:textSize="18sp"
+                android:textStyle="bold" />
+
+            <TextView
+                android:id="@+id/maxHeightNumericalText"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="Numerical: --"
+                android:layout_marginTop="6dp" />
+
+            <TextView
+                android:id="@+id/maxHeightAnalyticalText"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="Analytical: --" />
+
+            <TextView
+                android:id="@+id/maxHeightErrorText"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="Error: --" />
+
+        </LinearLayout>
+
+        <!-- Flight Time -->
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:orientation="vertical"
+            android:padding="12dp"
+            android:layout_marginTop="12dp"
+            android:background="#EEEEEE">
+
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="Flight Time"
+                android:textSize="18sp"
+                android:textStyle="bold" />
+
+            <TextView
+                android:id="@+id/flightTimeNumericalText"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="Numerical: --"
+                android:layout_marginTop="6dp" />
+
+            <TextView
+                android:id="@+id/flightTimeAnalyticalText"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="Analytical: --" />
+
+            <TextView
+                android:id="@+id/flightTimeErrorText"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="Error: --" />
+
+        </LinearLayout>
+
+        <!-- Landing Position -->
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:orientation="vertical"
+            android:padding="12dp"
+            android:layout_marginTop="12dp"
+            android:background="#EEEEEE">
+
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="Landing Position"
+                android:textSize="18sp"
+                android:textStyle="bold" />
+
+            <TextView
+                android:id="@+id/landingNumericalText"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="Numerical: --"
+                android:layout_marginTop="6dp" />
+
+            <TextView
+                android:id="@+id/landingAnalyticalText"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="Analytical: --" />
+
+            <TextView
+                android:id="@+id/landingErrorText"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="Error: --" />
+
+        </LinearLayout>
+
+        <Button
+            android:id="@+id/runAgainButton"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:text="Run Again"
+            android:layout_marginTop="20dp"
+            android:layout_marginBottom="20dp" />
+
+    </LinearLayout>
+
+</ScrollView>
